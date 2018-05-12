@@ -1,0 +1,1 @@
+fslmaths $1 -Tmean $2

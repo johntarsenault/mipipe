@@ -1,0 +1,30 @@
+
+
+
+@compute_gcor -input  Tank180423_IMA_25+orig.BRIK -mask Tank180423_IMA_16_mask.nii
+
+#Global Correlation [gcorr]: The average correlation of all pairs of voxel time series inside of the brain. Illustrates differences between data due to motion/physiological noise/imaging artifacts (such as signal bleeding). Values closer to zero are better. 
+
+##################################################################################
+AFNI’s quality index (aqi) - Mean quality index as computed by AFNI’s 
+3dTqual  Tank180423_IMA_25.nii -mask Tank180423_IMA_16_mask.nii
+
+computes a `quality index' for each sub-brick in a 3D+time dataset.
+The output is a 1D time series with the index for each sub-brick.
+The results are written to stdout.
+
+Note that small values of the index are 'good', indicating that
+the sub-brick is not very different from the norm.  The purpose
+of this program is to provide a crude way of screening FMRI
+time series for sporadic abnormal images, such as might be
+caused by large subject head motion or scanner glitches.
+
+
+
+##################################################################################
+
+fslmaths Tank180423_IMA_25.nii -Tmean mean.nii
+fslmaths Tank180423_IMA_25.nii -Tstd std.nii
+fslmaths mean.nii -div std.nii tSNR.nii
+
+tSNR_mask.nii
