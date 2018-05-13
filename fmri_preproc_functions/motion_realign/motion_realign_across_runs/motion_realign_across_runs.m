@@ -1,10 +1,6 @@
 function inter_run_nonlinmc(input_file,output_file,params)
 
 
-bsplinedir='/mnt/.autofs/fmri/fmri/spm5_utils/prepro_v8_thomas/prepro_tools/prod/bspline';
-addpath(bsplinedir)
-
-
 disp('reading target volume...')
 ITARG=MRIread(params.mean_target);
 disp('reading movable volume...')

@@ -20,7 +20,7 @@ if exist(input_json)
     input_json_struct.(['preproc_step_', num2str(step_no), '_name']) = preproc_function.function_name;
     input_json_struct.(['preproc_step_', num2str(step_no), '_description']) = preproc_function.function_description;
     input_json_struct.(['preproc_step_', num2str(step_no), '_prefix']) = preproc_function.prefix;
-    input_json_struct.(['preproc_step_', num2str(step_no), '_regressor']) = regressor_file_name;
+    input_json_struct.(regressor_file_name{1}) = regressor_file_name{2};
 
     %convert struct to text
     output_json_text = jsonencode(input_json_struct);

@@ -2,7 +2,7 @@ function output = convert_dcm2niix_afni(dicom_dir, base_dir,shell_script_path)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-output_ep2d_dir = [base_dir, '/funct/_0_source_data/'];
+output_ep2d_dir = fullfile(base_dir, '/funct/_0_source_data/');
 output.dir = '/funct/_0_source_data/';
 
 if exist(fullfile(output_ep2d_dir,'file_list.txt'))
@@ -47,7 +47,7 @@ end
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-output_gre_3d_dir = [base_dir, '/funct/_0_source_data/gre_3d/'];
+output_gre_3d_dir = fullfile(base_dir, '/funct/_0_source_data/gre_3d/');
 
 %make output_gre_3d_dir if it doesn't exist
 if ~exist(output_gre_3d_dir)
@@ -65,7 +65,7 @@ end
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-output_gre_fm_dir = [base_dir, '/funct/_0_source_data/gre_fm/'];
+output_gre_fm_dir = fullfile(base_dir, '/funct/_0_source_data/gre_fm/');
 
 %make output_gre_3d_dir if it doesn't exist
 if ~exist(output_gre_fm_dir)

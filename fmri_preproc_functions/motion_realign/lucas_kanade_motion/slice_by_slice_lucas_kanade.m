@@ -79,6 +79,7 @@ refvol = 1; %reference volume for LucasKanade motion correction
     
     image_filename = sprintf('%s_Nbasis%02d_masknorm%.2f_stats.tif', path_epiC(1:end-4), Nbasis, mask_norm_val);
     regressor_filename = sprintf('%s_Nbasis%02d_masknorm%.2f_stats.mat', path_epiC(1:end-4), Nbasis, mask_norm_val)
+    regressor_filename_txt = sprintf('%s_Nbasis%02d_masknorm%.2f_stats.txt', path_epiC(1:end-4), Nbasis, mask_norm_val)
 
     figure;
     plot(corr_pre);
@@ -91,15 +92,18 @@ refvol = 1; %reference volume for LucasKanade motion correction
     close(gcf);
 
     save(regressor_filename, 'corr_pre', 'corr_post');
+    dlmwrite(regressor_filename_txt,1-corr_pre');
     
     fprintf('\n')
     
     image_filename_parts = fileparts_full(image_filename);
     regressor_filename_parts = fileparts_full(regressor_filename);
+    regressor_filename_txt_parts = fileparts_full(regressor_filename_txt);
 
     movefile(image_filename, regressor_dir);
     movefile(regressor_filename, regressor_dir);
+    movefile(regressor_filename_txt, regressor_dir);
 
     
-    regressor_name = [regressor_dir,regressor_filename_parts.file,regressor_filename_parts.ext];
+    regressor_name = {'motion_regressor',[regressor_dir,regressor_filename_txt_parts.file,regressor_filename_txt_parts.ext]};
 

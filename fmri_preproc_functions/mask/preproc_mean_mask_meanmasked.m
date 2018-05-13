@@ -12,11 +12,11 @@ end
 
 %make mean image
 functional_mean = fullfile(mask_dir, [functional_4D_parts.file, '_mean', functional_4D_parts.ext]);
-system(sprintf('/fmri/apps/fsl-5.0.0/bin/fslmaths %s -Tmean %s', functional_4D, functional_mean));
+system(sprintf('fslmaths %s -Tmean %s', functional_4D, functional_mean));
 
 %make mask
 functional_mask = fullfile(mask_dir, [functional_4D_parts.file, '_brain', functional_4D_parts.ext]);
-system(sprintf('/fmri/apps/fsl-5.0.0/bin/bet %s %s  -f 0.15 -g 0 -n -m', functional_mean, functional_mask));
+system(sprintf('bet %s %s  -f 0.15 -g 0 -n -m', functional_mean, functional_mask));
 
 %get name augmented by bet
 functional_mask = fullfile(mask_dir, [functional_4D_parts.file, '_brain_mask', functional_4D_parts.ext]);
@@ -29,7 +29,7 @@ end
 functional_mean_masked = fullfile(mask_dir, [functional_4D_parts.file, '_masked', functional_4D_parts.ext]);
 
 %mask mean image
-system(sprintf('/fmri/apps/fsl-5.0.0/bin/fslmaths %s -mul %s %s', functional_mean, functional_mask, functional_mean_masked));
+system(sprintf('fslmaths %s -mul %s %s', functional_mean, functional_mask, functional_mean_masked));
 
 
 %pass mask back in params structure
