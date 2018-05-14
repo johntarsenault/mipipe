@@ -5,6 +5,8 @@ for i_step_no = 1:size(step_no_function_pair, 1)
     %get current function and step number
     current_function = step_no_function_pair{i_step_no, 2};
     current_step_no = step_no_function_pair{i_step_no, 1};
+    disp(sprintf('initiating step - %d: %s\n',current_step_no,current_function))
+
     
     %get current steps inputs; useful if crashes
     workflow.step(i_step_no).input = input;
@@ -19,4 +21,5 @@ for i_step_no = 1:size(step_no_function_pair, 1)
     
     %assign output of current step to input of next step
     input = output;
+    disp(sprintf('completed step - %d: %s \n\n',current_step_no,current_function))
 end

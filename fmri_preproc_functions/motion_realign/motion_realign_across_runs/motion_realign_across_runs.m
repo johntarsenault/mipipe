@@ -1,9 +1,9 @@
 function inter_run_nonlinmc(input_file,output_file,params)
 
 
-disp('reading target volume...')
+%disp('reading target volume...')
 ITARG=MRIread(params.mean_target);
-disp('reading movable volume...')
+%disp('reading movable volume...')
 IMOV=MRIread(input_file);
 
 
@@ -26,7 +26,7 @@ Options.Penalty=1e-5;
 
 
 Iundist=zeros(Nx,Ny,Nsl,Nvol);
-disp('running registration...')
+%disp('running registration...')
      
 [~,mat,spacing] = image_registration(Imoving,Istatic,Options);
 

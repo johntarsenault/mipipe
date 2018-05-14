@@ -1,9 +1,9 @@
-function [print_name_image, print_name_matfile] = mc_undist_wouter_dante3_preproc(edir, fileName, output_file, params)
+function [print_name_image, print_name_matfile, print_name_txtfile] = mc_undist_wouter_dante3_preproc(edir, fileName, output_file, params)
 
 
 %check if mask present and report understandle error if not
 if ~exist([params.mask])
-    error('slice by slice mask cannot be found: %s',[params.mask]);
+    error('slice by slice mask cannot be found: %s', [params.mask]);
 end
 
 path_mask = [params.mask];
@@ -18,7 +18,7 @@ mask = (mask > 0.1 * max(mask(:)));
 
 %check if functional present and report understandle error if not
 if ~exist([edir, fileName])
-    error('slice by slice functional image cannot be found: %s',[edir, fileName]);
+    error('slice by slice functional image cannot be found: %s', [edir, fileName]);
 end
 
 dd2 = dir([edir, fileName]);
@@ -117,13 +117,13 @@ marcb = 0;
 
 
 msg = sprintf('------ Undistortion Parameters ------\n');
-disp(msg);
+%disp(msg);
 
 %msg = sprintf(' Target Dir          = %d\n',tdir); disp(msg);
 msg = sprintf(' UD sequence         = %d\n', seq);
-disp(msg);
+%disp(msg);
 msg = sprintf(' UD options          = %d\n', options);
-disp(msg);
+%disp(msg);
 %msg = sprintf(' FFT Scale Factor    = %g\n',fftscale); disp(msg);
 
 % select slice orientation
@@ -233,7 +233,7 @@ for w = 1:length(z_list) %  1:nsl
     slc = z_list(w);
     
     msg = sprintf('undist. slice : %d', slc);
-    disp(msg);
+    %disp(msg);
     
     
     %%%%%%%%%%
@@ -610,7 +610,7 @@ end % slc
 if dowrite == 1
     
     
-    path_und =  output_file;
+    path_und = output_file;
     
     for i = 1:length(V_epi)
         V_epi(i).fname = output_file;
@@ -644,3 +644,6 @@ save([path_und(1:end-4), '_stats.mat'], 'corr_pre', 'corr_post');
 
 print_name_image = [path_und(1:end-4), '_stats.tif'];
 print_name_matfile = [path_und(1:end-4), '_stats.mat'];
+
+print_name_txtfile = [path_und(1:end-4), '_stats.txt'];
+dlmwrite(print_name_txtfile, 1-corr_pre);

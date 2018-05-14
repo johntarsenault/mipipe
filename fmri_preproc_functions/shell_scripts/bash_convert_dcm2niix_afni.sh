@@ -7,4 +7,4 @@ output_file_name=$(basename "$OUTPUT")
 output_full_file_name=${output_file_name}'.nii'
 
 #save filename to file_list
-echo -e $output_full_file_name"\n" >> ${output_dir}file_list.txt
+#echo -e $output_full_file_name"\n" >> ${output_dir}file_list.txt

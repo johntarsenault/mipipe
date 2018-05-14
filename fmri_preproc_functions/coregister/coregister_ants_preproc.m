@@ -11,11 +11,11 @@ mean_image_parts = fileparts_full(params.mean_image_masked);
 mean_image_n4 = fullfile(coregister_dir, [mean_image_parts.file, '_n4_bias_correct', mean_image_parts.ext]);
 
 %perform N4 bias correction
-unix_command = sprintf('$ANTSPATH/N4BiasFieldCorrection -d 3 -i %s -o %s -c [100x100x100x100,0]', params.mean_image_masked, mean_image_n4)
+unix_command = sprintf('$ANTSPATH/N4BiasFieldCorrection -d 3 -i %s -o %s -c [100x100x100x100,0] > out.log', params.mean_image_masked, mean_image_n4);
 system(unix_command);
 
 %perform ants registration anatomical -> epi
-unix_command = sprintf('antsRegistrationSyN.sh -d 3 -f %s -m %s -t b -o %s/syn -n 10', params.template, mean_image_n4, coregister_dir)
+unix_command = sprintf('antsRegistrationSyN.sh -d 3 -f %s -m %s -t b -o %s/syn -n 10 > out.log', params.template, mean_image_n4, coregister_dir);
 system(unix_command);
 
 params.affine_transform = [coregister_dir, 'syn0GenericAffine.mat'];
