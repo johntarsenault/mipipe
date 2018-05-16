@@ -1,12 +1,13 @@
-#mipipe: monkey imaging pipeline
+## mipipe: monkey imaging pipeline
+
 **advantages**
 **1-** imposes directory structure
 **2-** saves additional information in .json
 **3-** parallelizes preprocessing
 **4-** spm scripts can read .json files and build 1st level analysis
 
-##Initial changes before you start 
-####change your .dcm2nii.ini to format dicom conversion
+## Initial changes before you start 
+## change your .dcm2nii.ini to format dicom conversion
 
 	gedit ~/.dcm2nii.ini &
 
@@ -17,7 +18,7 @@ monkeyNameDate_IMA_05.nii
 	isBIDS=1
 	filename=%n_IMA_%2s
 	
-####make sure fsl commands output nifi
+## make sure fsl commands output nifi
 
 	gedit ~/.bashrc &
 	
@@ -27,7 +28,7 @@ add these lines to your .bashrc
 	FSLOUTPUTTYPE=NIFTI
 	export FSLOUTPUTTYPE
 	
-####add ANTS to path
+## add ANTS to path
 
 	gedit ~/.bashrc &
 	
@@ -37,7 +38,7 @@ add these lines to your .bashrc
 	export PATH=${ANTSPATH}:$PATH
 	
 ## example pre-processing
-### set up main paths
+## set up main paths
 
 set up the paths
 add the path to your mipipe dir
@@ -59,7 +60,7 @@ path to template image
 
 	params.template = '/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/template/tank/tank_anat.nii';
 	
-###specify the parameters for analysis
+## specify the parameters for analysis
 
 specify the parameters for analysis
 
@@ -82,13 +83,13 @@ mask and perform quality assessment
 	functional_mask = preproc_mask_non_workflow(input, params);
 	params.image_no = preproc_quality_assessment(input, functional_mask, params);
 
-###mds of correlation of mean images	
+## mds of correlation of mean images	
 ![](./readme_pngs/qa_mds_meanImages.png)
 
-###tsnr across runs
+## tsnr across runs
  ![](./readme_pngs/qa_mean_tsnr.png)
 
-### interpretating quality assessment report
+## interpretating quality assessment report
 
 **Outlier Detection [outlier]:** The mean count of outliers found in each volume using the 3dToutcount command from AFNI. Lower values are better.
 
@@ -98,7 +99,7 @@ mask and perform quality assessment
 
 **MDS of correlation of mean images:** closer points are more similiar images.  Farther points are less similiar.  Often indicates ghosting.
 
-### remove bad images after quality assessment 
+## remove bad images after quality assessment 
 
 	runs2remove = [13 24];
 	[input, params] = remove_outlier_runs(runs2remove, input, params);

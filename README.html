@@ -11,9 +11,9 @@
   </style>
  </head>
  <body>
-  <h1 id="mipipe-monkey-imaging-pipeline">
+  <h2 id="mipipe-monkey-imaging-pipeline">
    mipipe: monkey imaging pipeline
-  </h1>
+  </h2>
   <p>
    <strong>
     advantages
@@ -42,9 +42,9 @@
   <h2 id="initial-changes-before-you-start">
    Initial changes before you start
   </h2>
-  <h4 id="change-your-dcm2niiini-to-format-dicom-conversion">
+  <h2 id="change-your-dcm2niiini-to-format-dicom-conversion">
    change your .dcm2nii.ini to format dicom conversion
-  </h4>
+  </h2>
   <pre><code>gedit ~/.dcm2nii.ini &amp;
 </code></pre>
   <p>
@@ -56,9 +56,9 @@
 isBIDS=1
 filename=%n_IMA_%2s
 </code></pre>
-  <h4 id="make-sure-fsl-commands-output-nifi">
+  <h2 id="make-sure-fsl-commands-output-nifi">
    make sure fsl commands output nifi
-  </h4>
+  </h2>
   <pre><code>gedit ~/.bashrc &amp;
 </code></pre>
   <p>
@@ -68,9 +68,9 @@ filename=%n_IMA_%2s
 FSLOUTPUTTYPE=NIFTI
 export FSLOUTPUTTYPE
 </code></pre>
-  <h4 id="add-ants-to-path">
+  <h2 id="add-ants-to-path">
    add ANTS to path
-  </h4>
+  </h2>
   <pre><code>gedit ~/.bashrc &amp;
 </code></pre>
   <p>
@@ -82,9 +82,9 @@ export PATH=${ANTSPATH}:$PATH
   <h2 id="example-pre-processing">
    example pre-processing
   </h2>
-  <h3 id="set-up-main-paths">
+  <h2 id="set-up-main-paths">
    set up main paths
-  </h3>
+  </h2>
   <p>
    set up the paths
    <br/>
@@ -109,9 +109,9 @@ params = set_preproc_paths(preproc_dir);
   </p>
   <pre><code>params.template = '/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/template/tank/tank_anat.nii';
 </code></pre>
-  <h3 id="specify-the-parameters-for-analysis">
+  <h2 id="specify-the-parameters-for-analysis">
    specify the parameters for analysis
-  </h3>
+  </h2>
   <p>
    specify the parameters for analysis
   </p>
@@ -137,21 +137,21 @@ input = cleanup_file_list_using_tr_no(params.base_dir, input, params.tr_no);
   <pre><code>functional_mask = preproc_mask_non_workflow(input, params);
 params.image_no = preproc_quality_assessment(input, functional_mask, params);
 </code></pre>
-  <h3 id="mds-of-correlation-of-mean-images">
+  <h2 id="mds-of-correlation-of-mean-images">
    mds of correlation of mean images
-  </h3>
+  </h2>
   <p>
    <img alt="" src="./readme_pngs/qa_mds_meanImages.png"/>
   </p>
-  <h3 id="tsnr-across-runs">
+  <h2 id="tsnr-across-runs">
    tsnr across runs
-  </h3>
+  </h2>
   <p>
    <img alt="" src="./readme_pngs/qa_mean_tsnr.png"/>
   </p>
-  <h3 id="interpretating-quality-assessment-report">
+  <h2 id="interpretating-quality-assessment-report">
    interpretating quality assessment report
-  </h3>
+  </h2>
   <p>
    <strong>
     Outlier Detection [outlier]:
@@ -176,9 +176,9 @@ params.image_no = preproc_quality_assessment(input, functional_mask, params);
    </strong>
    closer points are more similiar images.  Farther points are less similiar.  Often indicates ghosting.
   </p>
-  <h3 id="remove-bad-images-after-quality-assessment">
+  <h2 id="remove-bad-images-after-quality-assessment">
    remove bad images after quality assessment
-  </h3>
+  </h2>
   <pre><code>runs2remove = [13 24];
 [input, params] = remove_outlier_runs(runs2remove, input, params);
 </code></pre>
