@@ -1,0 +1,437 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Made with Remarkable!
+  </title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css" rel="stylesheet"/>
+  <style type="text/css">
+   body,table tr{background-color:#fff}table tr td,table tr th{border:1px solid #ccc;text-align:left;padding:6px 13px;margin:0}pre code,table,table tr{padding:0}hr,pre code{background:0 0}body{font:16px Helvetica,Arial,sans-serif;line-height:1.4;color:#333;word-wrap:break-word;padding:10px 15px}strong,table tr th{font-weight:700}h1{font-size:2em;margin:.67em 0;text-align:center}h2{font-size:1.75em}h3{font-size:1.5em}h4{font-size:1.25em}h1,h2,h3,h4,h5,h6{font-weight:700;position:relative;margin-top:15px;margin-bottom:15px;line-height:1.1}h1,h2{border-bottom:1px solid #eee}hr{height:0;margin:15px 0;overflow:hidden;border:0;border-bottom:1px solid #ddd}a{color:#4183C4}a.absent{color:#c00}ol,ul{padding-left:15px;margin-left:5px}ol{list-style-type:lower-roman}table tr{border-top:1px solid #ccc;margin:0}table tr:nth-child(2n){background-color:#aaa}table tr td :first-child,table tr th :first-child{margin-top:0}table tr td:last-child,table tr th :last-child{margin-bottom:0}img{max-width:100%}blockquote{padding:0 15px;border-left:4px solid #ccc}code,tt{margin:0 2px;padding:0 5px;white-space:nowrap;border:1px solid #eaeaea;background-color:#f8f8f8;border-radius:3px}pre code{margin:0;white-space:pre;border:none}.highlight pre,pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}
+  </style>
+ </head>
+ <body>
+  <h1 id="mipipe-monkey-imaging-pipeline">
+   mipipe: monkey imaging pipeline
+  </h1>
+  <p>
+   <strong>
+    advantages
+   </strong>
+   <br/>
+   <strong>
+    1-
+   </strong>
+   imposes directory structure
+   <br/>
+   <strong>
+    2-
+   </strong>
+   saves additional information in .json
+   <br/>
+   <strong>
+    3-
+   </strong>
+   parallelizes preprocessing
+   <br/>
+   <strong>
+    4-
+   </strong>
+   spm scripts can read .json files and build 1st level analysis
+  </p>
+  <h2 id="initial-changes-before-you-start">
+   Initial changes before you start
+  </h2>
+  <h4 id="change-your-dcm2niiini-to-format-dicom-conversion">
+   change your .dcm2nii.ini to format dicom conversion
+  </h4>
+  <pre><code>gedit ~/.dcm2nii.ini &amp;
+</code></pre>
+  <p>
+   make sure bids .json sidecar is outout and filename includes:
+   <br/>
+   monkeyNameDate_IMA_05.nii
+  </p>
+  <pre><code>isGZ=0
+isBIDS=1
+filename=%n_IMA_%2s
+</code></pre>
+  <h4 id="make-sure-fsl-commands-output-nifi">
+   make sure fsl commands output nifi
+  </h4>
+  <pre><code>gedit ~/.bashrc &amp;
+</code></pre>
+  <p>
+   add these lines to your .bashrc
+  </p>
+  <pre><code>#fsl data ouput
+FSLOUTPUTTYPE=NIFTI
+export FSLOUTPUTTYPE
+</code></pre>
+  <h4 id="add-ants-to-path">
+   add ANTS to path
+  </h4>
+  <pre><code>gedit ~/.bashrc &amp;
+</code></pre>
+  <p>
+   add these lines to your .bashrc
+  </p>
+  <pre><code>export ANTSPATH=/mnt/.autofs/storage/gbw-s-neu01_fmri-monkey-03/PROJECT/codeshare/toolbox/ants/bin
+export PATH=${ANTSPATH}:$PATH
+</code></pre>
+  <h2 id="example-pre-processing">
+   example pre-processing
+  </h2>
+  <h3 id="set-up-main-paths">
+   set up main paths
+  </h3>
+  <p>
+   set up the paths
+   <br/>
+   add the path to your mipipe dir
+  </p>
+  <pre><code>preproc_dir = '/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/mipipe/';
+addpath(preproc_dir);
+params = set_preproc_paths(preproc_dir);
+</code></pre>
+  <p>
+   path to base directory where pre-processing ouput goes
+  </p>
+  <pre><code>params.base_dir = '/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180425_test/';
+</code></pre>
+  <p>
+   path to dicoms
+  </p>
+  <pre><code>params.dicom_dir = '/data/fmri_archive_01/RAW/Tank/Tank180425_DICOM/MONKEY_FUNCTIONAL_20180425_185355_274000/';
+</code></pre>
+  <p>
+   path to template image
+  </p>
+  <pre><code>params.template = '/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/template/tank/tank_anat.nii';
+</code></pre>
+  <h3 id="specify-the-parameters-for-analysis">
+   specify the parameters for analysis
+  </h3>
+  <p>
+   specify the parameters for analysis
+  </p>
+  <pre><code>params.tr_no = 450; %# of trs per run
+params.image_no = 1; %image number to use for masks
+params.smooth.fwhm = 1.5; %fwhm for smoothing
+</code></pre>
+  <p>
+   specify whether to check images
+  </p>
+  <pre><code>params.check_mask = 1;
+params.check_coregister = 1;
+</code></pre>
+  <p>
+   convert dicom to nifti and remove incomplete runs
+  </p>
+  <pre><code>input = convert_dcm2niix_afni(params.dicom_dir, params.base_dir, params.shell_script_path);
+input = cleanup_file_list_using_tr_no(params.base_dir, input, params.tr_no);
+</code></pre>
+  <p>
+   mask and perform quality assessment
+  </p>
+  <pre><code>functional_mask = preproc_mask_non_workflow(input, params);
+params.image_no = preproc_quality_assessment(input, functional_mask, params);
+</code></pre>
+  <h3 id="mds-of-correlation-of-mean-images">
+   mds of correlation of mean images
+  </h3>
+  <p>
+   <img alt="" src="./readme_pngs/qa_mds_meanImages.png"/>
+  </p>
+  <h3 id="tsnr-across-runs">
+   tsnr across runs
+  </h3>
+  <p>
+   <img alt="" src="./readme_pngs/qa_mean_tsnr.png"/>
+  </p>
+  <h3 id="interpretating-quality-assessment-report">
+   interpretating quality assessment report
+  </h3>
+  <p>
+   <strong>
+    Outlier Detection [outlier]:
+   </strong>
+   The mean count of outliers found in each volume using the 3dToutcount command from AFNI. Lower values are better.
+  </p>
+  <p>
+   <strong>
+    Median Distance Index [quality]:
+   </strong>
+   The mean distance (1 – spearman’s rho) between each time point’s volume and the median volume using AFNI’s 3dTqual command. Lower values are better.
+  </p>
+  <p>
+   <strong>
+    temporal SNR [tSNR]:
+   </strong>
+   Mean intensty over time divided by standard deviation over time within brain mask.  Higher values are better.
+  </p>
+  <p>
+   <strong>
+    MDS of correlation of mean images:
+   </strong>
+   closer points are more similiar images.  Farther points are less similiar.  Often indicates ghosting.
+  </p>
+  <h3 id="remove-bad-images-after-quality-assessment">
+   remove bad images after quality assessment
+  </h3>
+  <pre><code>runs2remove = [13 24];
+[input, params] = remove_outlier_runs(runs2remove, input, params);
+</code></pre>
+  <p>
+   define preprocessing steps
+  </p>
+  <pre><code>step_no_function_pair = {2, 'reorient_sphinx_lsp'; ...
+3, 'slice_timing_afni_alt_z2_preproc'; ...   
+NaN, 'preproc_mean_mask_meanmasked_dilate_smooth'; ...
+4, 'slice_by_slice_within_run'; ...
+NaN, 'make_mean_target'; ...
+5, 'motion_realign_across_runs'; ...
+NaN, 'preproc_mask_mean_target'; ...
+NaN, 'coregister_ants_preproc'; ...
+6, 'apply_coregister_4D_ants_preproc'; ...
+7,'fsl_smooth_preproc'};
+</code></pre>
+  <p>
+   run all processing steps
+  </p>
+  <pre><code>tic
+workflow = loop_workflow_steps(step_no_function_pair,input,params);
+toc
+</code></pre>
+  <h2 id="understanding-mipipe">
+   understanding mipipe
+  </h2>
+  <p>
+   loops through each step
+   <br/>
+   ouput of step used as input of the next step
+  </p>
+  <pre><code>for i_step_no = 1:size(step_no_function_pair, 1)
+
+    %get current function and step number
+    current_function = step_no_function_pair{i_step_no, 2};
+    current_step_no = step_no_function_pair{i_step_no, 1};
+
+    %run current step
+    [output, params] = run_workflow_step(input, get_preproc_functions(current_function), current_step_no, params);
+
+    %assign output of current step to input of next step
+    input = output;
+
+end
+</code></pre>
+  <p>
+   if function performed on each image
+   <br/>
+   parfor loop through all images and run current step
+  </p>
+  <pre><code>parfor i = 1:numel(input.file_list)
+    input_file = #name of input image
+    ouput_file = #name of ouput image
+
+    if preproc_function.is_regressor_created
+        regressor_file_name = preproc_function.function_call(input_file, ouput_file, params);
+        add_workflow_step_to_json_w_regressor(input_file, ouput_file, preproc_function, step_no, regressor_file_name);
+    else
+        preproc_function.function_call(input_file, ouput_file, params);
+        add_workflow_step_to_json(input_file, ouput_file, preproc_function, step_no);
+    end
+
+end
+</code></pre>
+  <p>
+   if function
+   <strong>
+    not
+   </strong>
+   performed on each run
+  </p>
+  <pre><code>params = preproc_function.function_call(input, params);
+</code></pre>
+  <h2 id="writing-functions-for-mipipe">
+   writing functions for mipipe
+  </h2>
+  <p>
+   function where
+   <br/>
+   <strong>
+    1:
+   </strong>
+   regressor created and image
+   <br/>
+   <strong>
+    2:
+   </strong>
+   loops through each image
+  </p>
+  <pre><code>function regressor_name = example_function(input_file, output_file, params)
+
+    motion_regressor_name = motion_correction_function(input_file, output_file, params.mask);
+    regressor_name = {'motion_regressor',motion_regressor_name};
+
+end
+</code></pre>
+  <p>
+   function where
+   <br/>
+   <strong>
+    1:
+   </strong>
+   <strong>
+    no
+   </strong>
+   regressor created and image
+   <br/>
+   <strong>
+    2:
+   </strong>
+   loops through each image
+  </p>
+  <pre><code>function example_function(input_file, output_file, params)
+
+    smooth_function(input_file, output_file);
+
+end
+</code></pre>
+  <p>
+   function where
+   <br/>
+   <strong>
+    1:
+   </strong>
+   <strong>
+    no
+   </strong>
+   regressor created and image
+   <br/>
+   <strong>
+    2:
+   </strong>
+   <strong>
+    no
+   </strong>
+   loops through each image
+  </p>
+  <pre><code>function params = example_function(input, params)
+
+     params.mean_image_masked = mask_function(params.mask,params.mean_image);
+
+end
+</code></pre>
+  <h2 id="adding-function-to-get_preproc_functions">
+   adding function to get_preproc_functions
+  </h2>
+  <pre><code>    case 'slice_timing_afni_alt_z2_preproc'
+    preproc_function.function_call = @slice_timing_afni_alt_z2_preproc;
+    preproc_function.function_name = 'slice_timing_afni_alt_z2_preproc';
+    preproc_function.function_description = 'slice timing correction using afni with timing set to alt+z2';
+    preproc_function.prefix = 'st';
+    preproc_function.is_directory_created = 1;
+    preproc_function.is_regressor_created = 0;
+    preproc_function.is_each_image_processed = 1;
+</code></pre>
+  <h2 id="understanding-directory-structure">
+   understanding directory structure
+  </h2>
+  <p>
+   each step has a numbered folder
+   <br/>
+   also regressors, masks and coregistration steps have a sepearate folder
+   <br/>
+   <img alt="" src="./readme_pngs/folder_layout_cropped.png"/>
+  </p>
+  <p>
+   each image file is followed by a suffix explaining the steps performed
+  </p>
+  <p>
+   Tank180425_IMA_08_r_st_u_mr_nr_s.nii
+   <br/>
+   realign (r) -&gt; slice timing (st) -&gt; slice-by-slice (u) -&gt; aligned across runs (mr) -&gt; ANTS non-rigid registration (nr) -&gt; smoothed (s)
+  </p>
+  <p>
+   <img alt="" src="./readme_pngs/smooth_folder_contents_cropped.png"/>
+  </p>
+  <h2 id="understanding-json-files">
+   understanding json files
+  </h2>
+  <p>
+   each image is accompanied by json file with the same name
+   <br/>
+   (below) abbreviated example of .json file
+  </p>
+  <pre><code>{"Modality":"MR",
+"MagneticFieldStrength":3,
+"Manufacturer":"Siemens",
+"ManufacturersModelName":"Prisma_fit",
+"InstitutionName":"KUL",
+"InstitutionalDepartmentName":"Department",
+"InstitutionAddress":"Herestraat_49_Leuven_Brussels_BE_3000",
+"ProcedureStepDescription":"Monkey_Functional",
+"SoftwareVersions":"syngo_MR_E11",
+"MRAcquisitionType":"2D",
+"SeriesDescription":"ep2d_p3_1.25x1.25x1.2mm",
+"ProtocolName":"ep2d_p3_1.25x1.25x1.2mm",
+"ScanningSequence":"EP",
+"SeriesNumber":23,
+"AcquisitionTime":"23:23:39.415000",
+"SliceThickness":1.2,
+"SpacingBetweenSlices":1.2,
+"EchoTime":0.013,
+"RepetitionTime":2,
+"FlipAngle":84,
+"PartialFourier":0.75,
+"BaseResolution":84,
+"ShimSetting":[-686,4128,-1714,698,-436,-4451,1936,-69],
+"TxRefAmp":55.6199,
+"ReceiveCoilName":"8ChConnectorBox",
+"ReceiveCoilActiveElements":"RX1-8",
+"PercentPhaseFOV":100,
+"BandwidthPerPixelPhaseEncode":48.924,
+"PixelBandwidth":1655,
+"PhaseEncodingDirection":"j",
+"SliceTiming":  [0.9875,0,1.0275,0.0375,1.0675,0.0775,1.1075,0.1175,1.1475,
+0.1575,1.1875,0.1975,1.225,0.2375,1.265,0.275,1.305,0.315,1.345,0.355,1.385,0.395,1.425,0.435,1.4625,0.475,1.5025,0.5125,1.5425,0.5525,1.5825,
+0.5925,1.6225,0.6325,1.6625,0.6725,1.7,0.7125,1.74,0.75,1.78,0.79,1.82,0.83,1.86,0.87,1.9,0.91,1.9375,0.95],
+"InPlanePhaseEncodingDirectionDICOM":"COL",
+"ConversionSoftware":"dcm2niix",
+"ConversionSoftwareVersion":"v1.0.20171215 (OpenJPEG build) GCC5.3.1",
+"preproc_step_2_name":"reorient_sphinx_lsp",
+"preproc_step_2_description":"reorients image acquired in sphinx position and HeadFirstProne orientation and labelled as LSP correctly",
+"preproc_step_2_prefix":"r",
+"preproc_step_3_name":"slice_timing_afni_alt_z2_preproc",
+"preproc_step_3_description":"slice timing correction using afni with timing set to alt+z2",
+"preproc_step_3_prefix":"st",
+"preproc_step_4_name":"slice_by_slice_lucas_kanade",
+"preproc_step_4_description":"runs slice by slice lucas kanade motion realignment",
+"preproc_step_4_prefix":"k",
+"motion_regressor":"/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180425/kanade//funct/regressor/slice_by_slice_lucas_kanade/Tank180425_IMA_23_r_st_k_Nbasis12_masknorm0.10_stats.txt",
+"preproc_step_5_name":"motion_realign_across_runs",
+"preproc_step_5_description":"motion realignment across runs",
+"preproc_step_5_prefix":"mr",
+"preproc_step_6_name":"apply_coregister_4D_ants_preproc",
+"preproc_step_6_description":"applies ants",
+"preproc_step_6_prefix":"nr",
+"preproc_step_7_name":"fsl_smooth_preproc",
+"preproc_step_7_description":"smooths each images with a fwhm kernel",
+"preproc_step_7_prefix":"s",
+"spm_order_file":"/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_spm_matFiles/Tank20180425/Tank_20180425_2327_Q_spm.mat",
+"pca_regressor":"/data/fmri_monkey_03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180425/kanade/funct/regressor/glm_denoise/Tank180425_IMA_23_r_st_k_mr_nr_s_pca_glmDenoise.txt",
+"pca_regressor_no":7}
+</code></pre>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js">
+  </script>
+  <script>
+   hljs.initHighlightingOnLoad();
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+  </script>
+ </body>
+</html>

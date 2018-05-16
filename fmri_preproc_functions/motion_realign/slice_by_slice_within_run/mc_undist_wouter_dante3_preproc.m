@@ -646,4 +646,4 @@ print_name_image = [path_und(1:end-4), '_stats.tif'];
 print_name_matfile = [path_und(1:end-4), '_stats.mat'];
 
 print_name_txtfile = [path_und(1:end-4), '_stats.txt'];
-dlmwrite(print_name_txtfile, 1-corr_pre);
+dlmwrite(print_name_txtfile, 1-corr_pre');

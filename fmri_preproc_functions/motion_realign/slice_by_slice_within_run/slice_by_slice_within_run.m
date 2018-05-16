@@ -16,5 +16,7 @@ movefile(print_name_image, regressor_dir);
 movefile(print_name_matfile, regressor_dir);
 movefile(print_name_txtfile, regressor_dir);
 
+print_name_txtfile_parts = fileparts_full(print_name_txtfile);
+print_name_txtfile = fullfile(regressor_dir,[print_name_txtfile_parts.file,print_name_txtfile_parts.ext]);
 
 regressor_name = {'motion_regressor',print_name_txtfile};

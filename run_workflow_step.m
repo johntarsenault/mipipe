@@ -23,7 +23,7 @@ if preproc_function.is_each_image_processed
     %% loop through each input image and run the current preprocessing step
     parfor i_input_file_no = 1:numel(input.file_list)
         
-        %assign prefix if prefix is not empty
+        %assign suffix if suffix is not empty
         if numel(preproc_function.prefix)
             current_file_parts = fileparts_full(input.file_list{i_input_file_no});
             file_list{i_input_file_no} = [current_file_parts.file,'_',preproc_function.prefix, current_file_parts.ext];

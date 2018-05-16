@@ -16,7 +16,7 @@ params.smooth.fwhm = 1.5; %fwhm for smoothing
 
 %specify whether to check images
 params.check_mask = 0;
-params.check_coregister = 1;
+params.check_coregister = 0;
 
 %convert dicom to nifti and remove incomplete runs
 input = convert_dcm2niix_afni(params.dicom_dir, params.base_dir, params.shell_script_path);
@@ -26,6 +26,8 @@ input = cleanup_file_list_using_tr_no(params.base_dir, input, params.tr_no);
 functional_mask = preproc_mask_non_workflow(input, params);
 params.image_no = preproc_quality_assessment(input, functional_mask, params);
 
+%remove bad images after quality assessment 
+%[input, params] = remove_outlier_runs(runs2remove, input, params);
 
 %define preprocessing steps
 step_no_function_pair = {2, 'reorient_sphinx_lsp'; ...

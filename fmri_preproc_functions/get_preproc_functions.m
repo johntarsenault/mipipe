@@ -5,7 +5,7 @@ switch function_name
     case 'reorient_sphinx_lsp'
         preproc_function.function_call = @reorient_sphinx_lsp;
         preproc_function.function_name = 'reorient_sphinx_lsp';
-        preproc_function.function_description = 'reorients image acquired in sphinx position, HeadFirstProne orientation and correctly labelled as LSP';
+        preproc_function.function_description = 'reorients image acquired in sphinx position HeadFirstProne orientation and correctly labelled as LSP';
         preproc_function.prefix = 'r';
         preproc_function.is_directory_created = 1;
         preproc_function.is_regressor_created = 0;
@@ -34,7 +34,7 @@ switch function_name
         % params.mask = '/path/to/*_brain_mask.nii
         preproc_function.function_call = @slice_by_slice_within_run;
         preproc_function.function_name = 'slice_by_slice_within_run';
-        preproc_function.function_description = 'slice by slice motion realignment within a run: in-house hauke, dante, wouter';
+        preproc_function.function_description = 'slice by slice motion realignment within a run: in-house hauke-dante-wouter';
         preproc_function.prefix = 'u';
         preproc_function.is_directory_created = 1;
         preproc_function.is_regressor_created = 1;
@@ -44,7 +44,7 @@ switch function_name
         % requires:
         % params.image_no = 5; determines which image to make target from 
         % creates:
-        % params.mean_target
+        % params.mean_target = '/path/to/mean_target.nii
         preproc_function.function_call = @make_mean_target;
         preproc_function.function_name = 'make_mean_target';
         preproc_function.function_description = 'motion realignment across runs';
@@ -78,7 +78,8 @@ switch function_name
     case 'preproc_mask'
         %requires:
         %params.make_mean_target.image_no = 1; image number to start make a
-        %mask from
+        %creates:
+        %params.mask = '/path/to/mask.nii';
         preproc_function.function_call = @preproc_mask;
         preproc_function.function_name = 'preproc_mask';
         preproc_function.function_description = 'generates a mask for motion realigment and quality assessment';
@@ -90,25 +91,40 @@ switch function_name
     case 'preproc_mean_mask_meanmasked'
         %requires:
         %params.preproc_mask.image_no = 1
-        %image number to start make a mask from
+        %creates:
+        %params.mean_image = '/path/to/mean_image.nii';
+        %params.mask = '/path/to/mask.nii';
+        %params.mean_image_masked = '/path/to/mean_image_masked.nii';
         preproc_function.function_call = @preproc_mean_mask_meanmasked;
         preproc_function.function_name = 'preproc_mean_mask_meanmasked';
-        preproc_function.function_description = 'generates a mean image, mask of mean image, and a masked mean image';
+        preproc_function.function_description = 'generates a mean image -mask of mean image - and a masked mean image';
         preproc_function.prefix = '';
         preproc_function.is_directory_created = 0;
         preproc_function.is_regressor_created = 0;
         preproc_function.is_each_image_processed = 0;
         
     case 'preproc_mean_mask_meanmasked_dilate_smooth'
+        %requires:
+        %params.image_no = 1
+        %creates:
+        %params.mean_image = '/path/to/mean_image.nii';
+        %params.mask = '/path/to/mask.nii';
+        %params.mean_image_masked = '/path/to/mean_image_masked.nii';
+        %params.dilate = '/path/to/dilated_mask.nii';
+        %params.dilate_smooth = '/path/to/dilated_smooth_mask.nii';
         preproc_function.function_call = @preproc_mean_mask_meanmasked_dilate_smooth;
         preproc_function.function_name = 'preproc_mean_mask_meanmasked_dilate_smooth';
-        preproc_function.function_description = 'generates a mean image, mask of mean image, masked mean image, dilate mask and smooth mask';
+        preproc_function.function_description = 'generates a mean image mask of mean image masked mean image dilate mask and smooth mask';
         preproc_function.prefix = '';
         preproc_function.is_directory_created = 0;
         preproc_function.is_regressor_created = 0;
         preproc_function.is_each_image_processed = 0;
         
     case 'preproc_mask_mean_target'
+        %requires:
+        %params.mean_target = '/path/to/mean_target.nii';
+        %creates:
+        %params.mean_image_masked = '/path/to/mean_image_masked.nii';
         preproc_function.function_call = @preproc_mask_mean_target;
         preproc_function.function_name = 'preproc_mask_mean_target';
         preproc_function.function_description = 'mask target image';
