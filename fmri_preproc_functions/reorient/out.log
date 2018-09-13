@@ -1,0 +1,9 @@
+mri_convert.bin -i /mnt/.autofs/storage/gbw-s-neu01_fmri-monkey-03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180606/funct/_0_source_data/gre_3d/Tank180606_4avg_GRE.nii --in_orientation RIA -o /mnt/.autofs/storage/gbw-s-neu01_fmri-monkey-03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180606/funct/_0_source_data/gre_3d/test.nii 
+$Id: mri_convert.c,v 1.226 2016/02/26 16:15:24 mreuter Exp $
+reading from /mnt/.autofs/storage/gbw-s-neu01_fmri-monkey-03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180606/funct/_0_source_data/gre_3d/Tank180606_4avg_GRE.nii...
+TR=5.00, TE=0.00, TI=0.00, flip angle=0.00
+Setting input orientation to RIA
+i_ras = (1, 0, 0)
+j_ras = (0, 0, -1)
+k_ras = (0, 1, 0)
+writing to /mnt/.autofs/storage/gbw-s-neu01_fmri-monkey-03/PROJECT/Sjoerd/FaceBody_Discrimination/fMRI/daily_fMRI_results/tank180606/funct/_0_source_data/gre_3d/test.nii...

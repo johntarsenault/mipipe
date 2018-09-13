@@ -11,7 +11,7 @@ cellfun(@(json, spm_order) assign_order_file_to_json_single(json, spm_order), or
 
 %get fixation in addition
 if fixation_option == 1;
-    [fix_no ima_no] = get_fix_from_elab_pdf(pdf_file_name);
+    [fix_no ima_no]     = get_fix_from_elab_pdf(pdf_file_name);
     [fix_string]        = align_fixation_to_ima(fix_no,ima_no,ordered_json_files);  
     cellfun(@(json, fix) assign_fixation_to_json_single(json, fix), ordered_json_files, fix_string);
 end

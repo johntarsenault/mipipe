@@ -21,7 +21,7 @@ for i_runs = 1:numel(input.file_list)
     output_file_tsnr{i_runs} = [qa_dir,input_file_parts.file,'_tsnr',input_file_parts.ext];
 
     output_file_mean_tsnr{i_runs} = [[qa_dir,'/mean_tsnr/'],input_file_parts.file,'_tsnr.txt'];
-    delete(output_file_mean_tsnr{i_runs});
+    %delete(output_file_mean_tsnr{i_runs});
 end
 
 mean_median_distance_index = zeros(1,numel(input.file_list));

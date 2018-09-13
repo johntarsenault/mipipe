@@ -1,0 +1,9 @@
+function re_run_workflow(params, step_no)
+
+step_no_function_pair = workflow.step_no_function_pair
+
+workflow.step(i_step_no).input = input;
+workflow.step(i_step_no).params = params;
+workflow.step(i_step_no).preproc_function = get_preproc_functions(current_function);
+
+workflow = loop_workflow_steps(step_no_function_pair,input,params)

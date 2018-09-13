@@ -46,7 +46,7 @@ while ischar(tline)
     split_line = strsplit(tline);
     if numel(split_line) > 2
         if all(isstrprop(split_line{1}, 'digit')) & all(isstrprop(split_line{3}, 'alpha'))
-            disp([split_line{1}, ' ', split_line{6}]);
+            disp([split_line{1}, ' ', split_line{3}, ' ', split_line{6}]);
             fix_no = [fix_no str2num(split_line{6})];
             ima_no = [ima_no str2num(split_line{1})];
             log_alpha{end+1} = split_line{3};
