@@ -1,4 +1,4 @@
-function re_run_workflow(basedir, start_step, params_new)
+function re_run_workflow(base_dir, start_step, params_new)
 
 % if params_new not defined
 if ~exist('params_new','var')
@@ -6,7 +6,7 @@ if ~exist('params_new','var')
 end
 
 % load workflow ino data
-load(fullfile(basedir,'workflow.mat'));
+load(fullfile(base_dir,'workflow.mat'));
 
 step_no_function_pair = workflow.step_no_function_pair;
 input = workflow.step(start_step).input;

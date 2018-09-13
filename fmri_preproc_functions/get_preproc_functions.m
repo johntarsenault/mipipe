@@ -42,7 +42,7 @@ switch function_name
         
     case 'make_mean_target'
         % requires:
-        % params.image_no = 5; determines which image to make target from 
+        % params.image_no = 5; determines which image to make target from
         % creates:
         % params.mean_target = '/path/to/mean_target.nii
         preproc_function.function_call = @make_mean_target;
@@ -63,7 +63,7 @@ switch function_name
         preproc_function.is_directory_created = 1;
         preproc_function.is_regressor_created = 0;
         preproc_function.is_each_image_processed = 1;
-                
+        
     case 'fsl_smooth_preproc'
         %requires:
         %params.smooth.fwhm = 1.5; fwhm of smoothing in mm
@@ -149,7 +149,7 @@ switch function_name
     case 'coregister_ants_preproc'
         % requires:
         % params.mean_image_masked = '/path/to/mean_image_masked.nii';
-        % creates: 
+        % creates:
         % params.affine_transform
         % params.b_spline_warp_transform
         preproc_function.function_call = @coregister_ants_preproc;
@@ -192,28 +192,28 @@ switch function_name
         % params.b_spline_warp_transform_fmri_2_gre; created in 'coregister_ants_preproc_fmri_2_gre_2_anat'
         % params.affine_transform_gre_2_anat; created in 'coregister_ants_preproc_fmri_2_gre_2_anat'
         % params.b_spline_warp_transform_gre_2_anat; created in 'coregister_ants_preproc_fmri_2_gre_2_anat'
-
+        
         preproc_function.function_call = @apply_coregister_4D_ants_preproc_fmri_2_gre_2_anat;
         preproc_function.function_name = 'apply_coregister_4D_ants_preproc_fmri_2_gre_2_anat';
         preproc_function.function_description = 'applies ants coregistration (fmri -> gre -> anat) on 4D data';
         preproc_function.prefix = 'nr';
         preproc_function.is_directory_created = 1;
         preproc_function.is_regressor_created = 0;
-        preproc_function.is_each_image_processed = 1; 
+        preproc_function.is_each_image_processed = 1;
         
-     case 'preproc_mask_masked_gre'
+    case 'preproc_mask_masked_gre'
         % requires:
         % params.gre = '/path/to/gre.nii';
-
+        
         preproc_function.function_call = @preproc_mask_masked_gre;
         preproc_function.function_name = 'preproc_mask_masked_gre';
         preproc_function.function_description = 'create a mask - and apply that mask for gre';
         preproc_function.prefix = '';
         preproc_function.is_directory_created = 0;
         preproc_function.is_regressor_created = 0;
-        preproc_function.is_each_image_processed = 0;   
+        preproc_function.is_each_image_processed = 0;
         
-     case 'reorient_sphinx_single_gre'
+    case 'reorient_sphinx_single_gre'
         % requires:
         % params.gre_masked = '/path/to/gre_masked.nii';
         % creates:
@@ -224,9 +224,9 @@ switch function_name
         preproc_function.prefix = '';
         preproc_function.is_directory_created = 0;
         preproc_function.is_regressor_created = 0;
-        preproc_function.is_each_image_processed = 0;   
-         
-     case 'preproc_combine_gre'
+        preproc_function.is_each_image_processed = 0;
+        
+    case 'preproc_combine_gre'
         % requires:
         % params.gre_dir = '/path/to/';
         % creates:
@@ -237,8 +237,46 @@ switch function_name
         preproc_function.prefix = '';
         preproc_function.is_directory_created = 0;
         preproc_function.is_regressor_created = 0;
-        preproc_function.is_each_image_processed = 0;           
-       
+        preproc_function.is_each_image_processed = 0;
+        
+    case 'coregister_ants_preproc_fmri_2_gre'
+        % requires:
+        % params.gre_reorient
+        % params.mean_image_masked
+        preproc_function.function_call = @coregister_ants_preproc_fmri_2_gre;
+        preproc_function.function_name = 'coregister_ants_preproc_fmri_2_gre';
+        preproc_function.function_description = 'runs ANTS rigid + affine + deformable b-spline syn coregistration fMRI -> gre';
+        preproc_function.prefix = '';
+        preproc_function.is_directory_created = 0;
+        preproc_function.is_regressor_created = 0;
+        preproc_function.is_each_image_processed = 0;
+        
+    case 'apply_coregister_ants_epi_mask_2_gre_mask'
+        % requires:
+        % params.gre_reorient = '/path/to/gre_roorient.nii';
+        % params.mean_image_masked = '/path/to/mean_image_masked.nii';
+        % params.template = '/path/to/template.nii';
+        preproc_function.function_call = @apply_coregister_ants_epi_mask_2_gre_mask;
+        preproc_function.function_name = 'apply_coregister_ants_epi_mask_2_gre_mask';
+        preproc_function.function_description = 'apply ANTS coregistration to mask -> check mask -> apply mask to gre';
+        preproc_function.prefix = '';
+        preproc_function.is_directory_created = 0;
+        preproc_function.is_regressor_created = 0;
+        preproc_function.is_each_image_processed = 0;
+        
+    case 'reorient_sphinx_single_gre_unmasked'
+        % requires:
+        % params.gre = '/path/to/gre_masked.nii';
+        % creates:
+        % gre_reorient = '/path/to/gre.nii';
+        preproc_function.function_call = @reorient_sphinx_single_gre_unmasked;
+        preproc_function.function_name = 'reorient_sphinx_single_gre_unmasked';
+        preproc_function.function_description = 'reorient sphinx single gre unmasked';
+        preproc_function.prefix = '';
+        preproc_function.is_directory_created = 0;
+        preproc_function.is_regressor_created = 0;
+        preproc_function.is_each_image_processed = 0;
+        
     otherwise
         error('the preproc function your trying to call doesn''t exit');
 end

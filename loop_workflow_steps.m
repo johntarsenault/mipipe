@@ -15,11 +15,11 @@ for i_step_no = start_step:size(step_no_function_pair, 1)
     
     % get current steps inputs then save
     % used to re-generate work flow after a crash
-    workflow.step_no_function_pair = step_no_function_pair
+    workflow.step_no_function_pair = step_no_function_pair;
     workflow.step(i_step_no).input = input;
     workflow.step(i_step_no).params = params;
     workflow.step(i_step_no).preproc_function = get_preproc_functions(current_function);
-    save(fullfile(params.base_dir, 'workflow.mat'), 'workflow')
+    save(fullfile(params.base_dir, 'workflow.mat'), 'workflow');
     
     % run current step
     [output, params] = run_workflow_step(input, get_preproc_functions(current_function), current_step_no, params);
