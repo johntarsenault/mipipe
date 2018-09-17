@@ -19,3 +19,4 @@ system(sprintf('fslmaths %s -mul %s %s', params.gre_reorient, params.gre_mask, g
 
 %pass gre mask back in params structure
 params.gre_masked = gre_masked;
+params.gre_reorient = gre_masked;
