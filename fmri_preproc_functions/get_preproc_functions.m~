@@ -131,7 +131,7 @@ switch function_name
         %params.dilate_smooth = '/path/to/dilated_smooth_mask.nii';
         preproc_function.function_call = @preproc_mean_mask_mmds_check;
         preproc_function.function_name = 'preproc_mean_mask_mmds_check';
-        preproc_function.function_description = 'generates a mean image mask of mean image masked mean image dilate mask and smooth mask -> check mask and reiterate if necess';
+        preproc_function.function_description = 'generates a mean image mask of mean image masked mean image dilate mask and smooth mask';
         preproc_function.prefix = '';
         preproc_function.is_directory_created = 0;
         preproc_function.is_regressor_created = 0;
