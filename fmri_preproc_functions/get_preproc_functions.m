@@ -10,7 +10,14 @@ switch function_name
         preproc_function.is_directory_created = 1;
         preproc_function.is_regressor_created = 0;
         preproc_function.is_each_image_processed = 1;
-        
+   case 'reorient_lsp_to_sphinx_scanner_ffp'
+        preproc_function.function_call = @reorient_lsp_to_sphinx_scanner_ffp;
+        preproc_function.function_name = 'reorient_lsp_to_sphinx_scanner_ffp';
+        preproc_function.function_description = 'reorients image acquired in sphinx position FootFirstProne orientation and correctly labelled as LSP';
+        preproc_function.prefix = 'r';
+        preproc_function.is_directory_created = 1;
+        preproc_function.is_regressor_created = 0;
+        preproc_function.is_each_image_processed = 1;
     case 'slice_timing'
         preproc_function.function_call = @slice_timing_preproc;
         preproc_function.function_name = 'slice_timing';
