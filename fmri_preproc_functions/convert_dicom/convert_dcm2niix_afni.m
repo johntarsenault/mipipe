@@ -40,7 +40,7 @@ if ~exist(output_gre_3d_dir)
     mkdir(output_gre_3d_dir);
 end
 
-gre_3d_dirs = dir([dicom_dir, 'GRE_3D*']);
+gre_3d_dirs = dir(fullfile(dicom_dir, 'GRE_3D*'));
 gre_3d_dirs(find([gre_3d_dirs.isdir] == 0)) = [];
 
 for i_gre_3d_dirs = 1:numel(gre_3d_dirs)
@@ -58,7 +58,7 @@ if ~exist(output_gre_fm_dir)
     mkdir(output_gre_fm_dir);
 end
 
-gre_fm_dirs = dir([dicom_dir, 'GRE_FM*']);
+gre_fm_dirs = dir(fullfile(dicom_dir, 'GRE_FM*'));
 gre_fm_dirs(find([gre_fm_dirs.isdir] == 0)) = [];
 
 for i_gre_fm_dirs = 1:numel(gre_fm_dirs)
